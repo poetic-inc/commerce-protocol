@@ -2,167 +2,130 @@
 **Version:** 1.0
 **Status:** Stable
 
-### 1. Overview
+## 1. Introduction
 
-This document provides the normative specification for the Poetic Commerce Protocol (PCP). PCP is a decentralized protocol designed to facilitate **agentic commerce**, enabling AI agents to discover, understand, and transact with online merchants in a standardized way.
+The Poetic Commerce Protocol (PCP) is a standardized, machine-readable protocol designed to enable **AI agents** to seamlessly discover, understand, and transact with online merchants. It eliminates the need for custom API integrations by providing a universal layer for agentic commerce.
 
-The protocol's primary goal is to create a universal, machine-readable layer for commerce, abstracting away the need for bespoke API integrations for each merchant. It achieves this by leveraging open standards, including JSON-LD, Schema.org, and RDF.
+## 2. Core Concepts
 
-#### 1 Core Concepts
+*   **Agent:** An AI program acting on behalf of a user for commercial activities (e.g., product discovery, purchasing).
+*   **Merchant:** An entity selling goods or services, represented by a `schema:Organization`.
+*   **Manifest:** A JSON-LD document hosted by the Merchant. It's the entry point for an Agent, declaring the merchant's identity, capabilities, API endpoints, and authentication requirements.
+*   **PCP Vocabulary:** An RDF vocabulary extending Schema.org with commerce-specific concepts like `poetic:inventoryId` and `poetic:authentication`.
 
-*   **Agent:** An autonomous or semi-autonomous software program that acts on behalf of a user to perform commercial activities (e.g., product discovery, price comparison, purchasing).
-*   **Merchant:** An entity offering goods or services for sale. In PCP, a merchant is represented by a `schema:Organization`.
-*   **Manifest:** A JSON-LD document, hosted by the Merchant, that serves as the entry point for an Agent. It declares the merchant's identity, capabilities, API endpoints, and authentication requirements.
-*   **PCP Vocabulary:** A formal RDF vocabulary (ontology) that extends Schema.org with concepts specific to agentic commerce, such as `poetic:inventoryId` and `poetic:authentication`.
+## 3. How PCP Works (Protocol Flow)
 
----
+PCP operates on a simple discovery-and-interaction model:
 
-### 2. Protocol Architecture
+1.  **Discovery:** An Agent finds the Merchant's Manifest file.
+2.  **Understanding:** The Agent parses the Manifest to identify API endpoints (catalog, checkout, order status) and authentication methods.
+3.  **Authentication:** The Agent authenticates with the Merchant's system using credentials obtained from the Manifest.
+4.  **Interaction:** The Agent uses authenticated credentials to interact with standardized API endpoints for tasks like fetching products or placing orders.
 
-The protocol operates on a discovery-and-interaction model.
+### 3.1. Manifest Discovery
 
-1.  **Discovery:** The Agent discovers the Merchant's Manifest file.
-2.  **Parsing & Understanding:** The Agent parses the JSON-LD Manifest to identify key API endpoints (`catalog`, `checkout`, `orderStatus`) and understand the required authentication scheme.
-3.  **Authentication:** The Agent authenticates with the Merchant's system according to the `poetic:authentication` block in the Manifest, obtaining an access token or other credentials.
-4.  **Interaction:** The Agent uses the authenticated credentials to interact with the Merchant's standardized API endpoints to perform actions like fetching the product catalog, placing an order, and checking order status.
+Merchants should make their Manifest discoverable via:
 
-#### 2.1. Manifest Discovery
+1.  **Well-Known URI:** `/.well-known/poetic-manifest.json` relative to their domain root.
+2.  **HTML Link Tag:** `<link rel="poetic-manifest" href="https://path/to/your/manifest.json">` in their website's `<head>`.
 
-Merchants SHOULD make their Manifest discoverable via one of the following methods:
+## 4. The Merchant Manifest
 
-1.  **Well-Known URI:** By placing the manifest at the following path relative to their domain root:
-    `/.well-known/poetic-manifest.json`
-2.  **HTML Link Tag:** By including a `<link>` tag in the `<head>` of their main website's HTML:
-    `<link rel="poetic-manifest" href="https://path/to/your/manifest.json">`
+The Manifest is a **REQUIRED** JSON-LD document, serving as the cornerstone of PCP. Its root object **MUST** be `@type: schema:Organization`.
 
----
-
-### 3. The Merchant Manifest Specification
-
-The Manifest is the cornerstone of the protocol. It MUST be a valid JSON-LD document.
-
-#### 3.1. Root Object
-
-The root object of the Manifest MUST be of `@type: schema:Organization`.
-
-#### 3.2. Properties
+### 4.1. Key Properties
 
 | Property                 | Type                               | Requirement  | Description                                                                                                                                                           |
 | ------------------------ | ---------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@context`               | Object                             | **REQUIRED** | The JSON-LD context. MUST include `"schema": "https://schema.org/"` and `"poetic": "https://specs.poetic.com/v1/"`.                                                 |
-| `@type`                  | String                             | **REQUIRED** | MUST be `schema:Organization`.                                                                                                                                        |
-| `@id`                    | URL (String)                       | **REQUIRED** | A stable, unique, and dereferenceable URI that identifies the organization.                                                                                           |
-| `name`                   | String                             | **REQUIRED** | The legal name of the organization.                                                                                                                                   |
-| `url`                    | URL (String)                       | **RECOMMENDED**| The primary URL of the merchant's human-readable website.                                                                                                             |
-| `logo`                   | URL (String)                       | **RECOMMENDED**| A URL to the organization's logo.                                                                                                                                     |
-| `poetic:protocolVersion` | String                             | **REQUIRED** | The version of the PCP specification this manifest conforms to. For this version, the value MUST be `"1.0"`.                                                          |
-| `poetic:catalogEndpoint` | URL (String)                       | **REQUIRED** | The absolute URL for the machine-readable Product Catalog API endpoint.                                                                                                 |
-| `poetic:authentication`  | `poetic:Authentication` Object     | **REQUIRED** | An object detailing the supported authentication methods required to access the Poetic API endpoints. See Section 4 for details.                                        |
-| `potentialAction`        | `schema:BuyAction` Object          | **REQUIRED** | Defines the entry point for the checkout process. The `target` property within this action is critical.                                                                |
-| `poetic:orderStatusEndpoint` | `schema:EntryPoint` Object         | **RECOMMENDED**| An EntryPoint object containing a `urlTemplate` for agents to check the status of a previously placed order. The template SHOULD include a variable like `{orderId}`. |
+| `@context`               | Object                             | **REQUIRED** | JSON-LD context, including `"schema": "https://schema.org/"` and `"poetic": "https://specs.poetic.com/v1/"`.                                                 |
+| `@type`                  | String                             | **REQUIRED** | Must be `schema:Organization`.                                                                                                                                        |
+| `@id`                    | URL (String)                       | **REQUIRED** | A stable, unique URI identifying the organization.                                                                                           |
+| `name`                   | String                             | **REQUIRED** | The organization's legal name.                                                                                                                                   |
+| `url`                    | URL (String)                       | **RECOMMENDED**| Primary URL of the merchant's website.                                                                                                             |
+| `logo`                   | URL (String)                       | **RECOMMENDED**| URL to the organization's logo.                                                                                                                                     |
+| `poetic:protocolVersion` | String                             | **REQUIRED** | The PCP specification version this manifest conforms to (e.g., `"1.0"`).                                                          |
+| `poetic:catalogEndpoint` | URL (String)                       | **REQUIRED** | Absolute URL for the Product Catalog API endpoint.                                                                                                 |
+| `poetic:authentication`  | `poetic:Authentication` Object     | **REQUIRED** | Details supported authentication methods. See Section 5.                                        |
+| `potentialAction`        | `schema:BuyAction` Object          | **REQUIRED** | Defines the checkout process entry point, with a critical `target` property.                                                                |
+| `poetic:orderStatusEndpoint` | `schema:EntryPoint` Object         | **RECOMMENDED**| An EntryPoint with a `urlTemplate` (e.g., `{orderId}`) for checking order status. |
 
----
-
-### 4. Authentication
+## 5. Authentication
 
 PCP requires secure communication. The `poetic:authentication` object specifies the mechanism.
 
-#### 4.1. `poetic:Authentication` Object Structure
+### 5.1. `poetic:Authentication` Object
 
 *   `@type`: MUST be `poetic:Authentication`.
-*   `supportedMethods`: An array of `poetic:AuthMethod` objects. An Agent SHOULD use the first method in the array that it supports.
+*   `supportedMethods`: An array of `poetic:AuthMethod` objects. Agents should use the first supported method.
 
-#### 4.2. `poetic:AuthMethod` Object Structure
+### 5.2. `poetic:AuthMethod` Object
 
 *   `@type`: MUST be `poetic:AuthMethod`.
-*   `method`: A string enum identifying the method. The initial spec defines one value:
-    *   `"OAuth2ClientCredentials"`: The OAuth 2.0 Client Credentials Grant flow.
-*   `tokenUrl`: **REQUIRED** for OAuth. The URL of the authorization server's token endpoint.
-*   `requiredScope`: **RECOMMENDED** for OAuth. A space-delimited string of scope values required to access the commerce APIs (e.g., `"commerce.all"`).
+*   `method`: A string enum (e.g., `"OAuth2ClientCredentials"`).
+*   `tokenUrl`: **REQUIRED** for OAuth. The authorization server's token endpoint URL.
+*   `requiredScope`: **RECOMMENDED** for OAuth. Space-delimited scope values (e.g., `"commerce.all"`).
 
-#### 4.3. Example Flow: OAuth 2.0 Client Credentials
+### 5.3. Example Flow: OAuth 2.0 Client Credentials
 
-1.  The Agent parses the `poetic:authentication` block from the Manifest.
-2.  The Agent makes a `POST` request to the `tokenUrl`.
-    *   **Headers**: `Content-Type: application/x-www-form-urlencoded`
-    *   **Body**: `grant_type=client_credentials&client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET`
-3.  The authorization server validates the credentials and returns a JSON object containing an `access_token`.
-4.  For all subsequent requests to PCP endpoints (catalog, checkout, etc.), the Agent MUST include the token in the HTTP `Authorization` header:
-    `Authorization: Bearer <access_token>`
+1.  Agent parses `poetic:authentication` from Manifest.
+2.  Agent makes `POST` request to `tokenUrl` with `Content-Type: application/x-www-form-urlencoded` and `grant_type=client_credentials&client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET`.
+3.  Authorization server returns JSON with `access_token`.
+4.  Agent includes `Authorization: Bearer <access_token>` header in all subsequent requests to PCP endpoints.
 
----
+## 6. Core Workflows and API Endpoints
 
-### 5. Core Workflows and API Endpoints
+All API responses **SHOULD** be `application/ld+json`.
 
-This section details the standardized interactions an Agent performs. All API responses SHOULD be `application/ld+json`.
+### 6.1. Fetching the Product Catalog
 
-#### 5.1. Workflow: Fetching the Product Catalog
+*   **Objective:** Discover merchant products.
+*   **Endpoint:** `poetic:catalogEndpoint` from Manifest.
+*   **HTTP Request:** `GET` with `Accept: application/ld+json` and `Authorization: Bearer <token>`.
+*   **Success Response (200 OK):** JSON-LD document with a list of `schema:Offer` objects. Each `schema:Offer` **MUST** include `poetic:inventoryId` (immutable transactional identifier).
 
-*   **Objective:** Discover the products a merchant offers.
-*   **Endpoint Source:** The URL from the `poetic:catalogEndpoint` property in the Manifest.
-*   **HTTP Request:**
-    *   Method: `GET`
-    *   Headers: `Accept: application/ld+json`, `Authorization: Bearer <token>`
-*   **Success Response (200 OK):**
-    *   A JSON-LD document containing a list of objects. Each object MUST be a `schema:Offer`.
-    *   Each `schema:Offer` object **MUST** include the `poetic:inventoryId` property. This ID is the immutable, transactional identifier for that specific offer variation (e.g., a specific size and color of a shirt).
+### 6.2. Placing an Order (Checkout)
 
-#### 5.2. Workflow: Placing an Order (Checkout)
+*   **Objective:** Purchase items.
+*   **Endpoint:** `urlTemplate` from `potentialAction` (`@type: schema:BuyAction`) in Manifest.
+*   **HTTP Request:** `POST` (or `httpMethod` specified) with `Content-Type: application/ld+json` and `Authorization: Bearer <token>`.
+*   **Request Body:** A `schema:Order` object. `orderedItem` **MUST** be an array of `schema:OrderItem` objects. Each `schema:OrderItem`'s `orderedItem` **MUST** be a minimal `schema:Offer` with `@type` and `poetic:inventoryId`.
+*   **Success Response (201 Created or 200 OK):** A `schema:Order` object with `orderNumber` (merchant-specific ID) and `orderStatus` (e.g., `schema:OrderProcessing`).
 
-*   **Objective:** Purchase one or more items from the catalog.
-*   **Endpoint Source:** The `urlTemplate` from the `target` of the `potentialAction` (`@type: schema:BuyAction`) in the Manifest.
-*   **HTTP Request:**
-    *   Method: `POST` (or as specified by `httpMethod` in the `target`).
-    *   Headers: `Content-Type: application/ld+json`, `Authorization: Bearer <token>`
-    *   **Request Body:** A `schema:Order` object.
-        *   The `orderedItem` property MUST be an array of `schema:OrderItem` objects.
-        *   Each `schema:OrderItem`'s `orderedItem` property MUST be a minimal `schema:Offer` object containing the `@type` and the `poetic:inventoryId` of the item being purchased. This ensures transactional integrity.
+### 6.3. Checking Order Status
 
-*   **Success Response (201 Created or 200 OK):**
-    *   A `schema:Order` object representing the newly created order.
-    *   This response object MUST include the `orderNumber` (the merchant-specific order ID) and an `orderStatus` (e.g., `schema:OrderProcessing`).
+*   **Objective:** Get latest order status.
+*   **Endpoint:** `urlTemplate` from `poetic:orderStatusEndpoint` in Manifest.
+*   **HTTP Request:** `GET` (or `httpMethod` specified) with `Accept: application/ld+json` and `Authorization: Bearer <token>`. Replace `{orderId}` in `urlTemplate` with `orderNumber`.
+*   **Success Response (200 OK):** A `schema:Order` object with complete, up-to-date order details, including `orderStatus`.
 
-#### 5.3. Workflow: Checking Order Status
+## 7. PCP v1.0 Vocabulary Reference
 
-*   **Objective:** Get the latest status of a previously placed order.
-*   **Endpoint Source:** The `urlTemplate` from `poetic:orderStatusEndpoint` in the Manifest.
-*   **HTTP Request:**
-    *   The Agent MUST replace the `{orderId}` variable in the `urlTemplate` with the `orderNumber` received from the checkout response.
-    *   Method: `GET` (or as specified by `httpMethod`).
-    *   Headers: `Accept: application/ld+json`, `Authorization: Bearer <token>`
-*   **Success Response (200 OK):**
-    *   A `schema:Order` object containing the complete, up-to-date details of the requested order, including the current `orderStatus`.
+This section defines terms in the `poetic` namespace.
 
----
+### 7.1. Classes
 
-### 6. PCP v1.0 Vocabulary Reference
+*   `poetic:Authentication`: Describes an authentication scheme for Poetic endpoints.
+*   `poetic:AuthMethod`: Subclass of `schema:Intangible` describing a specific authentication method (e.g., OAuth 2.0 Client Credentials).
 
-This section formally defines the terms in the `poetic` namespace.
-
-#### 6.1. Classes
-
-*   `poetic:Authentication`: A class that describes an authentication scheme for Poetic endpoints. It acts as a container for one or more specific authentication methods.
-*   `poetic:AuthMethod`: A subclass of `schema:Intangible` that describes a specific method of authentication, such as OAuth 2.0 Client Credentials.
-
-#### 6.2. Properties
+### 7.2. Properties
 
 *   `poetic:protocolVersion`
     *   Domain: `schema:Organization`
     *   Range: `schema:Text`
-    *   Comment: The version of the Poetic Commerce Protocol that this manifest adheres to.
+    *   Comment: Version of the PCP specification this manifest adheres to.
 *   `poetic:catalogEndpoint`
     *   Domain: `schema:Organization`
     *   Range: `schema:URL`
-    *   Comment: The fully qualified URL endpoint for retrieving the merchant's machine-readable product catalog.
+    *   Comment: URL for retrieving the merchant's product catalog.
 *   `poetic:orderStatusEndpoint`
     *   Domain: `schema:Organization`
     *   Range: `schema:EntryPoint`
-    *   Comment: An EntryPoint URL template that an agent can use to check the status of a previously placed order.
+    *   Comment: EntryPoint URL template for checking order status.
 *   `poetic:authentication`
     *   Domain: `schema:Organization`
     *   Range: `poetic:Authentication`
-    *   Comment: A descriptor object that specifies the authentication methods required to interact with the Poetic endpoints.
+    *   Comment: Descriptor object specifying authentication methods for Poetic endpoints.
 *   `poetic:inventoryId`
     *   Domain: `schema:Offer`
     *   Range: `schema:Text`
-    *   Comment: The unique, immutable identifier for a specific offer within the Poetic Unified Data Model, used for transactional integrity. It MUST uniquely identify a purchasable item (e.g., SKU, UPC, or internal ID).
+    *   Comment: Unique, immutable identifier for a specific offer, used for transactional integrity.
