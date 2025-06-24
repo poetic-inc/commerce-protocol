@@ -13,7 +13,7 @@
     },
     "@id": "poetic:catalogEndpoint",
     "@type": "rdf:Property",
-    "comment": "The fully qualified URL endpoint for retrieving the merchant's machine-readable product catalog.",
+    "comment": "URL for retrieving the merchant's product catalog.",
     "domain": {
       "@id": "schema:Organization"
     },
@@ -24,7 +24,7 @@
   {
     "@id": "poetic:orderStatusEndpoint",
     "@type": "rdf:Property",
-    "comment": "An EntryPoint URL template that an agent can use to check the status of a previously placed order.",
+    "comment": "EntryPoint URL template for checking order status.",
     "domain": {
       "@id": "schema:Organization"
     },
@@ -35,7 +35,7 @@
   {
     "@id": "poetic:authentication",
     "@type": "rdf:Property",
-    "comment": "A descriptor object that specifies the authentication methods required to interact with the Poetic endpoints.",
+    "comment": "Descriptor object specifying authentication methods for Poetic endpoints.",
     "domain": {
       "@id": "schema:Organization"
     },
@@ -46,7 +46,7 @@
   {
     "@id": "poetic:inventoryId",
     "@type": "rdf:Property",
-    "comment": "The unique, immutable identifier for a specific offer within the Poetic Unified Data Model, used for transactional integrity.",
+    "comment": "Unique, immutable identifier for a specific offer, used for transactional integrity.",
     "domain": {
       "@id": "schema:Offer"
     },
@@ -57,7 +57,7 @@
   {
     "@id": "poetic:protocolVersion",
     "@type": "rdf:Property",
-    "comment": "The version of the Poetic Commerce Protocol that this manifest adheres to.",
+    "comment": "Version of the PCP specification this manifest adheres to.",
     "domain": {
       "@id": "schema:Organization"
     },
@@ -68,7 +68,7 @@
   {
     "@id": "poetic:Authentication",
     "@type": "rdfs:Class",
-    "comment": "A class that describes an authentication scheme for Poetic endpoints."
+    "comment": "Describes an authentication scheme for Poetic endpoints."
   },
   {
     "@id": "poetic:AuthMethod",
@@ -76,6 +76,6 @@
     "subClassOf": {
       "@id": "schema:Intangible"
     },
-    "comment": "A specific method of authentication, such as OAuth 2.0 Client Credentials."
+    "comment": "Subclass of schema:Intangible describing a specific authentication method (e.g., OAuth 2.0 Client Credentials)."
   }
 ]
