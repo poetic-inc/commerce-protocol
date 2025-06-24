@@ -1,6 +1,4 @@
-# Poetic Commerce Protocol (PCP) Specification
-**Version:** 1.0
-**Status:** Stable
+# Poetic Commerce Protocol (PCP)
 
 ## 1. Introduction
 
