@@ -4,17 +4,11 @@
 
 ### 1. Overview
 
-This document provides the normative specification for the Poetic Commerce Protocol (PCP) v1.0. PCP is a decentralized protocol designed to facilitate **agentic commerce**, enabling autonomous software agents to discover, understand, and transact with online merchants in a standardized way.
+This document provides the normative specification for the Poetic Commerce Protocol (PCP). PCP is a decentralized protocol designed to facilitate **agentic commerce**, enabling AI agents to discover, understand, and transact with online merchants in a standardized way.
 
 The protocol's primary goal is to create a universal, machine-readable layer for commerce, abstracting away the need for bespoke API integrations for each merchant. It achieves this by leveraging open standards, including JSON-LD, Schema.org, and RDF.
 
-#### 1.1. Document Conventions
-
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
-
-Property names, code, and data formats are formatted in `monospace`.
-
-#### 1.2. Core Concepts
+#### 1 Core Concepts
 
 *   **Agent:** An autonomous or semi-autonomous software program that acts on behalf of a user to perform commercial activities (e.g., product discovery, price comparison, purchasing).
 *   **Merchant:** An entity offering goods or services for sale. In PCP, a merchant is represented by a `schema:Organization`.

@@ -1,0 +1,81 @@
+[
+  {
+    "@context": {
+      "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+      "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+      "schema": "https://schema.org/",
+      "xsd": "http://www.w3.org/2001/XMLSchema#",
+      "poetic": "https://specs.poetic.com/v1/",
+      "comment": "rdfs:comment",
+      "domain": "schema:domainIncludes",
+      "range": "schema:rangeIncludes",
+      "subClassOf": "rdfs:subClassOf"
+    },
+    "@id": "poetic:catalogEndpoint",
+    "@type": "rdf:Property",
+    "comment": "The fully qualified URL endpoint for retrieving the merchant's machine-readable product catalog.",
+    "domain": {
+      "@id": "schema:Organization"
+    },
+    "range": {
+      "@id": "schema:URL"
+    }
+  },
+  {
+    "@id": "poetic:orderStatusEndpoint",
+    "@type": "rdf:Property",
+    "comment": "An EntryPoint URL template that an agent can use to check the status of a previously placed order.",
+    "domain": {
+      "@id": "schema:Organization"
+    },
+    "range": {
+      "@id": "schema:EntryPoint"
+    }
+  },
+  {
+    "@id": "poetic:authentication",
+    "@type": "rdf:Property",
+    "comment": "A descriptor object that specifies the authentication methods required to interact with the Poetic endpoints.",
+    "domain": {
+      "@id": "schema:Organization"
+    },
+    "range": {
+      "@id": "poetic:Authentication"
+    }
+  },
+  {
+    "@id": "poetic:inventoryId",
+    "@type": "rdf:Property",
+    "comment": "The unique, immutable identifier for a specific offer within the Poetic Unified Data Model, used for transactional integrity.",
+    "domain": {
+      "@id": "schema:Offer"
+    },
+    "range": {
+      "@id": "schema:Text"
+    }
+  },
+  {
+    "@id": "poetic:protocolVersion",
+    "@type": "rdf:Property",
+    "comment": "The version of the Poetic Commerce Protocol that this manifest adheres to.",
+    "domain": {
+      "@id": "schema:Organization"
+    },
+    "range": {
+      "@id": "schema:Text"
+    }
+  },
+  {
+    "@id": "poetic:Authentication",
+    "@type": "rdfs:Class",
+    "comment": "A class that describes an authentication scheme for Poetic endpoints."
+  },
+  {
+    "@id": "poetic:AuthMethod",
+    "@type": "rdfs:Class",
+    "subClassOf": {
+      "@id": "schema:Intangible"
+    },
+    "comment": "A specific method of authentication, such as OAuth 2.0 Client Credentials."
+  }
+]
