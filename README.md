@@ -43,7 +43,7 @@ The Manifest is a **REQUIRED** JSON-LD document, serving as the cornerstone of P
 | `poetic:protocolVersion` | String                             | **REQUIRED** | The PCP specification version this manifest conforms to (e.g., `"1.0"`).                                                          |
 | `poetic:catalogEndpoint` | URL (String)                       | **REQUIRED** | Absolute URL for the Product Catalog API endpoint.                                                                                                 |
 | `poetic:authentication`  | `poetic:Authentication` Object     | **REQUIRED** | Details supported authentication methods. See Section 5.                                        |
-| `potentialAction`        | `schema:BuyAction` Object          | **REQUIRED** | Defines the checkout process entry point, with a critical `target` property.                                                                |
+| `potentialAction`        | `schema:BuyAction` Object          | **REQUIRED** | Defines the checkout process entry point. Using `potentialAction` with `schema:BuyAction` is a deliberate design choice that leverages the widely-supported `schema.org` standard for better interoperability and richer semantics than a custom property would offer. |
 | `poetic:orderStatusEndpoint` | `schema:EntryPoint` Object         | **RECOMMENDED**| An EntryPoint with a `urlTemplate` (e.g., `{orderId}`) for checking order status. |
 
 ## 5. Authentication
