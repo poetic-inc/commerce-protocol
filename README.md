@@ -2,7 +2,7 @@
 
 ## 1. Introduction
 
-The Poetic Commerce Protocol (PCP) is a standardized, machine-readable protocol designed to enable **AI agents** to seamlessly discover, understand, and transact with online merchants. It eliminates the need for custom API integrations by providing a universal layer for agentic commerce.
+The Poetic Commerce Protocol (PCP) is a specification for a standardized, machine-readable **manifest file**. This manifest is designed to enable **AI agents** to seamlessly discover, understand, and interact with a merchant's commerce APIs. While merchants are responsible for implementing the actual API endpoints, PCP provides a universal standard for declaring those capabilities. This eliminates the need for bespoke discovery and integration logic for each merchant, creating a more streamlined ecosystem for agentic commerce.
 
 ## 2. Core Concepts
 
@@ -15,17 +15,16 @@ The Poetic Commerce Protocol (PCP) is a standardized, machine-readable protocol 
 
 PCP operates on a simple discovery-and-interaction model:
 
-1.  **Discovery:** An Agent finds the Merchant's Manifest file.
-2.  **Understanding:** The Agent parses the Manifest to identify API endpoints (catalog, checkout, order status) and authentication methods.
+1.  **Discovery:** An Agent finds the Merchant's Manifest file located `/.well-known/pcp-manifest.jsonl`.
+2.  **Understanding:** The Agent parses the Manifest to identify resources (catalog, checkout, order status) and authentication methods.
 3.  **Authentication:** The Agent authenticates with the Merchant's system using credentials obtained from the Manifest.
 4.  **Interaction:** The Agent uses authenticated credentials to interact with standardized API endpoints for tasks like fetching products or placing orders.
 
 ### 3.1. Manifest Discovery
 
-Merchants should make their Manifest discoverable via:
+To ensure reliable discovery, merchants must make their Manifest available at a standardized well-known URI.
 
-1.  **Well-Known URI:** `/.well-known/poetic-manifest.json` relative to their domain root.
-2.  **HTML Link Tag:** `<link rel="poetic-manifest" href="https://path/to/your/manifest.json">` in their website's `<head>`.
+*   **Well-Known URI:** `/.well-known/pcp-manifest.json` relative to the merchant's domain root. Agents will look for the manifest at this location.
 
 ## 4. The Merchant Manifest
 
