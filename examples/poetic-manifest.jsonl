@@ -4,21 +4,21 @@
     "poetic": "https://specs.poetic.com/v1/"
   },
   "@type": "schema:Organization",
-  "@id": "https://seoul-cybernetics.co.kr/#organization",
-  "name": "Seoul Cybernetics",
-  "url": "https://seoul-cybernetics.co.kr",
-  "logo": "https://seoul-cybernetics.co.kr/assets/logo.svg",
-  "description": "Cutting-edge custom drone components and cybernetic enhancements. Shipped globally from Seoul.",
+  "@id": "https://american-threads.com/#organization",
+  "name": "American Threads",
+  "url": "https://american-threads.com",
+  "logo": "https://american-threads.com/assets/logo.svg",
+  "description": "High-quality men's clothing, designed and shipped from the USA.",
   "address": {
     "@type": "schema:PostalAddress",
-    "streetAddress": "417 Teheran-ro",
-    "addressLocality": "Gangnam-gu",
-    "addressRegion": "Seoul",
-    "postalCode": "06164",
-    "addressCountry": "KR"
+    "streetAddress": "123 Main St",
+    "addressLocality": "New York",
+    "addressRegion": "NY",
+    "postalCode": "10001",
+    "addressCountry": "US"
   },
   "poetic:protocolVersion": "1.0",
-  "poetic:catalogEndpoint": "https://api.poetic.com/stores/sc-789/catalog",
+  "poetic:catalogEndpoint": "https://api.poetic.com/stores/at-123/catalog",
   "poetic:authentication": {
     "@type": "poetic:Authentication",
     "supportedMethods": [
@@ -32,7 +32,7 @@
   },
   "poetic:orderStatusEndpoint": {
     "@type": "schema:EntryPoint",
-    "urlTemplate": "https://api.poetic.com/stores/sc-789/orders/{orderId}",
+    "urlTemplate": "https://api.poetic.com/stores/at-123/orders/{orderId}",
     "httpMethod": "GET",
     "encodingType": "application/ld+json"
   },
@@ -41,7 +41,7 @@
     "name": "Purchase Products",
     "target": {
       "@type": "schema:EntryPoint",
-      "urlTemplate": "https://api.poetic.com/stores/sc-789/checkout",
+      "urlTemplate": "https://api.poetic.com/stores/at-123/checkout",
       "httpMethod": "POST",
       "encodingType": "application/ld+json"
     }
